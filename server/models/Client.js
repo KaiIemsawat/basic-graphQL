@@ -8,3 +8,4 @@ const ClientSchema = new mongoose.Schema({
 
 module.exports = mongoose.model("Client", ClientSchema);
 //  Mongoose is trying to be smart by making your collection name plural.
+// So, the collection seen in database will be 'clients'
