@@ -1,4 +1,4 @@
-const { projects, clients } = require("../sampleData.js");
+// const { projects, clients } = require("../sampleData.js");
 
 // * Mongoose model
 const Project = require("../models/Project");
@@ -11,6 +11,7 @@ const {
     GraphQLString,
     GraphQLSchema,
     GraphQLList,
+    GraphQLNonNull,
 } = require("graphql");
 
 // * create Project Type
@@ -26,7 +27,7 @@ const ProjectType = new GraphQLObjectType({
             resolve(parent, args) {
                 // In this case, 'parent' refer to 'name : "..."'. In this case -> "Project"
                 return Client.findById(parent.clientId);
-                // 'clientTd' from 'parent.clientId' comes from the imported 'projects'
+                // 'clientTd' in 'parent.clientId' comes from mongoDB
             },
         },
     }),
@@ -77,9 +78,49 @@ const RootQuery = new GraphQLObjectType({
     },
 });
 
+// * Mutation
+// Then we can manipulate data/database
+const mutation = new GraphQLObjectType({
+    name: "Mutation",
+    fields: {
+        // Add a client
+        addClient: {
+            type: ClientType,
+            args: {
+                name: { type: GraphQLNonNull(GraphQLString) },
+                email: { type: GraphQLNonNull(GraphQLString) },
+                phone: { type: GraphQLNonNull(GraphQLString) },
+            },
+            resolve(parent, args) {
+                // create new 'client' using 'moongoose' model
+                const client = new Client({
+                    // passing value from graphQL to moongoose
+                    name: args.name,
+                    email: args.email,
+                    phone: args.phone,
+                });
+
+                // Save
+                return client.save();
+            },
+        },
+        // Delete a client
+        deleteClient: {
+            type: ClientType,
+            args: {
+                id: { type: GraphQLNonNull(GraphQLID) },
+            },
+            resolve(parent, args) {
+                return Client.findByIdAndRemove(args.id);
+            },
+        },
+    },
+});
+
 // Export as 'GraphQLSchema' that take an object of query as 'RootQuery'
 module.exports = new GraphQLSchema({
     query: RootQuery,
+    mutation,
 });
 
 /* 
