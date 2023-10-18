@@ -8,3 +8,4 @@ const ProjectSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Project", ProjectSchema);
+//  Mongoose is trying to be smart by making your collection name plural.
