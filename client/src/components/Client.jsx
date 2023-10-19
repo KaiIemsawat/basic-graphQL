@@ -1,21 +1,9 @@
-import { gql, useQuery } from "@apollo/client";
-import ClientRow from "./ClientRow";
+import { useQuery } from "@apollo/client";
 // gql -> to make query
 // useQuery -> use in component to get data
-
-// * A couple notes for using GraphQL
-// use backtick not parentheses
-// use the same one the was used in browserinside 'query getClient {}
-const GET_CLIENT = gql`
-    query getClient {
-        clients {
-            name
-            id
-            phone
-            email
-        }
-    }
-`;
+import { GET_CLIENT } from "../queries/clientQueries";
+import ClientRow from "./ClientRow";
+import Spinner from "./Spinner";
 
 export default function Client() {
     // This is where we run useQuery and get data in return
@@ -23,7 +11,7 @@ export default function Client() {
     const { loading, error, data } = useQuery(GET_CLIENT);
     // console.log(data);
 
-    if (loading) return <p>Loading....</p>;
+    if (loading) return <Spinner />;
     if (error) return <p>Error occur somewhere....</p>;
 
     return (
