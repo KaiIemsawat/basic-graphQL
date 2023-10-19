@@ -10,7 +10,24 @@ export default function ClientRow({ client }) {
         variables: {
             id: client.id,
         },
-        refetchQueries: [{ query: GET_CLIENT }],
+        // this next line will re-fetch and the display will show the update table after delete
+        // refetchQueries: [{ query: GET_CLIENT }],
+
+        // thses next lines will query the data from cache and filter out the id that is match to the deleted id
+        // Then, need to create 'InMemoryCache()' function in 'App.js'
+        update(cache, { data: { deleteClient } }) {
+            const { clients } = cache.readQuery({
+                query: GET_CLIENT,
+            });
+            cache.writeQuery({
+                query: GET_CLIENT,
+                data: {
+                    clients: clients.filter(
+                        (client) => client.id !== deleteClient.id
+                    ),
+                },
+            });
+        },
     });
 
     return (
