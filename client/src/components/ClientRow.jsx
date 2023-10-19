@@ -1,6 +1,7 @@
 import { FaTrash } from "react-icons/fa";
 import { useMutation } from "@apollo/client";
 import { DELETE_CLIENT } from "../mutations/clientMutations";
+import { GET_CLIENT } from "../queries/clientQueries";
 
 export default function ClientRow({ client }) {
     // To use 'useMutation()', need square brackets
@@ -9,6 +10,7 @@ export default function ClientRow({ client }) {
         variables: {
             id: client.id,
         },
+        refetchQueries: [{ query: GET_CLIENT }],
     });
 
     return (
