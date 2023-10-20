@@ -2,6 +2,7 @@ import { FaTrash } from "react-icons/fa";
 import { useMutation } from "@apollo/client";
 import { DELETE_CLIENT } from "../mutations/clientMutations";
 import { GET_CLIENT } from "../queries/clientQueries";
+import { GET_PROJECTS } from "../queries/projectQueries";
 
 export default function ClientRow({ client }) {
     // To use 'useMutation()', need square brackets
@@ -10,24 +11,24 @@ export default function ClientRow({ client }) {
         variables: {
             id: client.id,
         },
-        // this next line will re-fetch and the display will show the update table after delete
-        // refetchQueries: [{ query: GET_CLIENT }],
 
-        // thses next lines will query the data from cache and filter out the id that is match to the deleted id
-        // Then, need to create 'InMemoryCache()' function in 'App.js'
-        update(cache, { data: { deleteClient } }) {
-            const { clients } = cache.readQuery({
-                query: GET_CLIENT,
-            });
-            cache.writeQuery({
-                query: GET_CLIENT,
-                data: {
-                    clients: clients.filter(
-                        (client) => client.id !== deleteClient.id
-                    ),
-                },
-            });
-        },
+        /* In case if project should be removed when remove client */
+        refetchQueries: [{ query: GET_CLIENT }, { query: GET_PROJECTS }],
+
+        /* In case if project should remain but no client assign */
+        // update(cache, { data: { deleteClient } }) {
+        //     const { clients } = cache.readQuery({
+        //         query: GET_CLIENT,
+        //     });
+        //     cache.writeQuery({
+        //         query: GET_CLIENT,
+        //         data: {
+        //             clients: clients.filter(
+        //                 (client) => client.id !== deleteClient.id
+        //             ),
+        //         },
+        //     });
+        // },
     });
 
     return (
