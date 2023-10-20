@@ -21,7 +21,7 @@ export default function AddProjectModal() {
             });
         },
     });
-    console.log(ADD_PROJECT.loc.source.body); //
+    // console.log(ADD_PROJECT.loc.source.body); //
 
     // Get clients for select
     const { loading, error, data } = useQuery(GET_CLIENT);

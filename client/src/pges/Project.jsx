@@ -3,6 +3,7 @@ import Spinner from "../components/Spinner";
 import { useQuery } from "@apollo/client";
 import { GET_PROJECT_BY_ID } from "../queries/projectQueries";
 import ClientInfo from "../components/ClientInfo";
+import DeleteProjectButton from "../components/DeleteProjectButton";
 
 export default function Project() {
     const { id } = useParams();
@@ -18,14 +19,15 @@ export default function Project() {
         <>
             {!loading && !error && (
                 <div className="mx-auto w-75 card p-5">
+                    <Link to="/" className="btn btn-primary ms-auto ">
+                        Home
+                    </Link>
                     <h1>{data.project.name}</h1>
                     <p>{data.project.description}</p>
                     <h5 className="mt-3">Project Status</h5>
                     <p className="lead">{data.project.status}</p>
                     <ClientInfo client={data.project.client} />
-                    <Link to="/" className="btn btn-light btn-sm mt-3">
-                        Back
-                    </Link>
+                    <DeleteProjectButton projectId={data.project.id} />
                 </div>
             )}
         </>

@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 const ADD_PROJECT = gql`
-    mutation AddProject(
+    mutation addProject(
         $name: String!
         $description: String!
         $status: ProjectStatus!
@@ -27,6 +27,15 @@ const ADD_PROJECT = gql`
     }
 `;
 
-export { ADD_PROJECT };
+const DELETE_PROJECT = gql`
+    mutation deleteProject($id: ID!) {
+        deleteProject(id: $id) {
+            id
+            name
+        }
+    }
+`;
+
+export { ADD_PROJECT, DELETE_PROJECT };
 
 // * 'ProjectStatus' comes from 'server/schema/schema.js' (enum)
