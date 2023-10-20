@@ -82,12 +82,10 @@ export default function AddClientModal() {
                             </h5>
                             <button
                                 type="button"
-                                className="close"
+                                className="btn-close"
                                 data-dismiss="modal"
                                 aria-label="Close"
-                            >
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            ></button>
                         </div>
                         <div className="modal-body">
                             <form onSubmit={onSubmit}>
