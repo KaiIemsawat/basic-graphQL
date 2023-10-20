@@ -3,13 +3,25 @@ import { FaList } from "react-icons/fa";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_PROJECTS } from "../queries/projectQueries";
 import { GET_CLIENT } from "../queries/clientQueries";
-import Spinner from "./Spinner";
+import { ADD_PROJECT } from "../mutations/projectMutations";
 
 export default function AddProjectModal() {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [clientId, setClientId] = useState("");
     const [status, setStatus] = useState("new");
+
+    const [addProject] = useMutation(ADD_PROJECT, {
+        variables: { name, description, clientId, status },
+        update(cache, { data: { addProject } }) {
+            const { projects } = cache.readQuery({ query: GET_PROJECTS });
+            cache.writeQuery({
+                query: GET_PROJECTS,
+                data: { projects: [...projects, addProject] },
+            });
+        },
+    });
+    console.log(ADD_PROJECT.loc.source.body); //
 
     // Get clients for select
     const { loading, error, data } = useQuery(GET_CLIENT);
@@ -20,6 +32,7 @@ export default function AddProjectModal() {
         if (name === "" || description === "" || status === "") {
             return alert("All fields need to be filled");
         }
+        addProject(name, description, clientId, status);
 
         setName("");
         setDescription("");
@@ -28,10 +41,10 @@ export default function AddProjectModal() {
 
         // -----
         // This part is to close modal after submit
-        const addClientModal = document.getElementById("addClientModal");
-        if (addClientModal) {
-            addClientModal.classList.remove("show");
-            addClientModal.style.display = "none";
+        const addProjectModal = document.getElementById("addProjectModal");
+        if (addProjectModal) {
+            addProjectModal.classList.remove("show");
+            addProjectModal.style.display = "none";
             const modalBackdrop = document.querySelector(".modal-backdrop");
             if (modalBackdrop) {
                 document.body.classList.remove("modal-open");

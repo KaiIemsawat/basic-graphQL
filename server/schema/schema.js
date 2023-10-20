@@ -123,7 +123,7 @@ const mutation = new GraphQLObjectType({
                 description: { type: GraphQLNonNull(GraphQLString) },
                 status: {
                     type: new GraphQLEnumType({
-                        name: "ProjectStatue", // Name need to be unique
+                        name: "ProjectStatus", // Name need to be unique
                         values: {
                             new: { value: "Not Started" },
                             progress: { value: "In Progress" },
@@ -163,7 +163,7 @@ const mutation = new GraphQLObjectType({
                 description: { type: GraphQLString },
                 status: {
                     type: new GraphQLEnumType({
-                        name: "ProjectStatueUpdate", // Name need to be unique
+                        name: "ProjectStatusUpdate", // Name need to be unique
                         values: {
                             new: { value: "Not Started" },
                             progress: { value: "In Progress" },
