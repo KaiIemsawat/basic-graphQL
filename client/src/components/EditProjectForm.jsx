@@ -22,7 +22,7 @@ export default function EditProjectForm({ project }) {
             return alert("All fields need to be filled");
         }
 
-        updateProject(name, description, status);
+        updateProject(name, description, status );
     };
 
     return (
